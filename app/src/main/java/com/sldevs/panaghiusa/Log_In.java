@@ -72,6 +72,11 @@ public class Log_In extends AppCompatActivity {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
+        if(email.equalsIgnoreCase("admin") && password.equalsIgnoreCase("admin")){
+            Intent i = new Intent(Log_In.this,Admin_Extension.class);
+            startActivity(i);
+            finish();
+        }
 
         if(email.isEmpty()){
             etEmail.setError("Email is required!");

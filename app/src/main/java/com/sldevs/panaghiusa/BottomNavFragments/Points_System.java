@@ -73,33 +73,33 @@ public class Points_System extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_points__system, container, false);
 
-        btnShowQR = view.findViewById(R.id.btnShowQR);
-
-        btnShowQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.show_qrcode, null);
-
-                // create the popup window
-                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-
-                // show the popup window
-                // which view you pass in doesn't matter, it is only used for the window tolken
-                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-
-                // dismiss the popup window when touched
-                popupView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        popupWindow.dismiss();
-                        return true;
-                    }
-                });
-            }
-        });
+//        btnShowQR = view.findViewById(R.id.btnShowQR);
+//
+//        btnShowQR.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.show_qrcode, null);
+//
+//                // create the popup window
+//                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+//                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+//                boolean focusable = true; // lets taps outside the popup also dismiss it
+//                final PopupWindow popupWindow = new PopupWindow(popupView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+//
+//                // show the popup window
+//                // which view you pass in doesn't matter, it is only used for the window tolken
+//                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+//
+//                // dismiss the popup window when touched
+//                popupView.setOnTouchListener(new View.OnTouchListener() {
+//                    @Override
+//                    public boolean onTouch(View v, MotionEvent event) {
+//                        popupWindow.dismiss();
+//                        return true;
+//                    }
+//                });
+//            }
+//        });
         return view;
     }
 }

@@ -76,7 +76,14 @@
                 android:textColor="@color/black"
                 android:text="Mobile No."/>
 
-
+            <Button
+                android:id="@+id/btnShowQR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show QR Code"
+                android:layout_marginTop="150dp"
+                android:layout_gravity="center"
+                android:background="@drawable/white_rounded_corner"/>
 
 
         </LinearLayout>

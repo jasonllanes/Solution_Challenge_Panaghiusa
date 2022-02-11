@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sldevs.panaghiusa">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -12,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Panaghiusa">
         <activity
+            android:name=".Admin_Extension"
+            android:exported="false" />
+        <activity
             android:name=".Craft_It"
             android:exported="false" />
         <activity
@@ -22,8 +29,7 @@
             android:exported="false" />
         <activity
             android:name=".Home_Screen"
-            android:exported="false"
-            />
+            android:exported="false" />
         <activity
             android:name=".Getting_Started"
             android:exported="false" />

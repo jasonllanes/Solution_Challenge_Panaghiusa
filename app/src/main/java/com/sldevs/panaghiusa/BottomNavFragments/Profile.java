@@ -1,11 +1,16 @@
 package com.sldevs.panaghiusa.BottomNavFragments;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.Gravity;
@@ -13,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -58,7 +64,8 @@ public class Profile extends Fragment {
     private TextView tvFullname,tvEmail,tvNumber;
     String uid;
     Button btnShowQR;
-
+    DialogFragment showQR;
+    ImageView imageViewClose,ivQR;
     public Profile() {
         // Required empty public constructor
 
@@ -95,13 +102,15 @@ public class Profile extends Fragment {
         }
 
 
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+
+
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         tvFullname = view.findViewById(R.id.tvFullName);
@@ -114,34 +123,48 @@ public class Profile extends Fragment {
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseReference = firebaseDatabase.getReference("Users/" + uid);
 
+        try {
+            loadProfile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        getData();
 
-//        btnShowQR = view.findViewById(R.id.btnShowQR);
-//
-//        btnShowQR.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.show_qrcode, null);
-//
-//                // create the popup window
-//                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-//                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-//                boolean focusable = true; // lets taps outside the popup also dismiss it
-//                final PopupWindow popupWindow = new PopupWindow(popupView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-//
-//                // show the popup window
-//                // which view you pass in doesn't matter, it is only used for the window tolken
-//                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-//
-//                // dismiss the popup window when touched
-//                popupView.setOnTouchListener(new View.OnTouchListener() {
-//                    @Override
-//                    public boolean onTouch(View v, MotionEvent event) {
-//                        popupWindow.dismiss();
-//                        return true;
-//                    }
-//                });
-//            }
-//        });
+        btnShowQR = view.findViewById(R.id.btnShowQR);
+
+        btnShowQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View qrcode = getActivity().getLayoutInflater().inflate(R.layout.show_qrcode, new LinearLayout(getActivity()), false);
+                showQR= new DialogFragment(R.layout.show_qrcode);
+//                imageViewClose = showQRshowQR.findViewById(R.id.ivClose);
+//                showQR.setContentView(R.layout.show_qrcode);
+//                showQR.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                Dialog builder = new Dialog(getActivity());
+                builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                builder.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                builder.setContentView(qrcode);
+                builder.show();
+                ivQR = qrcode.findViewById(R.id.ivQR);
+                imageViewClose = qrcode.findViewById(R.id.ivClose);
+                String id = FirebaseAuth.getInstance().getUid();
+                try {
+                    loadQRCode(id,ivQR);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                imageViewClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        builder.dismiss();
+                    }
+                });
+
+            }
+        });
 
         imgLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,12 +176,6 @@ public class Profile extends Fragment {
             }
         });
 
-        try {
-            loadProfile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        getData();
 
 
         return view;
@@ -188,15 +205,29 @@ public class Profile extends Fragment {
         });
     }
     public void loadProfile() throws IOException {
+        String id = FirebaseAuth.getInstance().getUid();
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-        StorageReference getQR = storageRef.child("ProfilePicture/"+ uid+ ".png");
+        StorageReference getQR = storageRef.child("ProfilePicture/"+ id+ ".png");
         final long ONE_MEGABYTE = 1024 * 1024;
         getQR.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 profilePicture.setImageBitmap(bitmap);
+            }
+        });
+    }
+    public void loadQRCode(String id,ImageView qrcode) throws IOException {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference getQR = storageRef.child("QRCodes/"+ id+ ".png");
+        final long ONE_MEGABYTE = 1024 * 1024;
+        getQR.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                qrcode.setImageBitmap(bitmap);
             }
         });
     }

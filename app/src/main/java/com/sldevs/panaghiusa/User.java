@@ -2,13 +2,14 @@ package com.sldevs.panaghiusa;
 
 public class User {
 
-    public String fullname,email,number,password,points;
+    public String id,fullname,email,number,password,points;
 
     public User(){
 
     }
 
-    public User(String fullname,String email,String number,String password,String points){
+    public User(String id,String fullname,String email,String number,String password,String points){
+        this.id = id;
         this.fullname = fullname;
         this.email = email;
         this.number = number;
